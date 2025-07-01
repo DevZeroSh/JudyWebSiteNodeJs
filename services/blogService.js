@@ -120,10 +120,10 @@ exports.getOneBlog = asyncHandler(async (req, res, next) => {
 
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  req.body.title = JSON.parse(req.body.title);
-  req.body.content = JSON.parse(req.body.content);
-  req.body.tags = JSON.parse(req.body.tags);
-  req.body.slug = slugify(req.body.title.en);
+  if (req.body.title) req.body.title = JSON.parse(req.body.title);
+  if (req.body.content) req.body.content = JSON.parse(req.body.content);
+  if (req.body.tags) req.body.tags = JSON.parse(req.body.tags);
+  if (req.body.title?.en) req.body.slug = slugify(req.body.title.en);
   const updatedBlog = await blogModel.findOneAndUpdate({ _id: id }, req.body, {
     new: true,
     runValidators: true,
