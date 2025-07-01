@@ -3,26 +3,27 @@ const mongoose = require("mongoose");
 
 const BlogSchema = mongoose.Schema(
   {
-    titleEN: {
-      type: String,
+    title: {
+      en: { type: String, required: true },
+      ar: { type: String, required: true },
+      tr: { type: String, required: true },
     },
-    titleAR: {
-      type: String,
+    content: {
+      en: { type: String, required: true },
+      ar: { type: String, required: true },
+      tr: { type: String, required: true },
     },
+    slug: { type: String, unique: true, required: true },
 
-    descriptionEN: {
-      type: String,
-      require: true,
-    },
-    descriptionAR: {
-      type: String,
-      require: true,
-    },
     photo: { type: String, require: true },
-    images: [String],
-    writer: { type: String },
+    images: String,
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
-
+    published: { type: Boolean, default: false },
+    tags: {
+      en: { type: [String], default: [] },
+      ar: { type: [String], default: [] },
+      tr: { type: [String], default: [] },
+    },
   },
   { timestamps: true }
 );

@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 const blogModel = require("../models/blogModel");
-const categoryModel = require("../models/categoryModel");
 
 const {
   uploadSingleImage,
@@ -15,6 +14,7 @@ exports.uploadBlogImages = uploadMixOfImages([
 
 const { v4: uuidv4 } = require("uuid");
 const sharp = require("sharp");
+const { default: slugify } = require("slugify");
 
 // Image processing
 exports.resizeBlogImages = asyncHandler(async (req, res, next) => {
@@ -99,8 +99,12 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   }
 });
 
-
 exports.createBlog = asyncHandler(async (req, res, next) => {
+  req.body.title = JSON.parse(req.body.title);
+  req.body.content = JSON.parse(req.body.content);
+  req.body.tags = JSON.parse(req.body.tags);
+  req.body.slug = slugify(req.body.title.en);
+
   const Blog = await blogModel.create(req.body);
   res.status(201).json({ data: Blog });
 });
@@ -116,7 +120,10 @@ exports.getOneBlog = asyncHandler(async (req, res, next) => {
 
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-
+  req.body.title = JSON.parse(req.body.title);
+  req.body.content = JSON.parse(req.body.content);
+  req.body.tags = JSON.parse(req.body.tags);
+  req.body.slug = slugify(req.body.title.en);
   const updatedBlog = await blogModel.findOneAndUpdate({ _id: id }, req.body, {
     new: true,
     runValidators: true,
