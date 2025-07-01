@@ -15,8 +15,8 @@ const BlogSchema = mongoose.Schema(
     },
     slug: { type: String, unique: true, required: true },
 
-    photo: { type: String, require: true },
-    images: String,
+    coverImage: { type: String, require: true },
+    thumbnailImage: [String],
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
     published: { type: Boolean, default: false },
     tags: {
@@ -29,17 +29,19 @@ const BlogSchema = mongoose.Schema(
 );
 
 const setImageURL = (doc) => {
-  if (doc.photo) {
-    const imageUrl = `${process.env.BASE_URL}/blog/${doc.photo}`;
-    doc.photo = imageUrl;
+  console.log(doc);
+  
+  if (doc.coverImage) {
+    const imageUrl = `${process.env.BASE_URL}/blog/${doc.coverImage}`;
+    doc.coverImage = imageUrl;
   }
-  if (doc.images) {
+  if (doc.thumbnailImage) {
     const imageList = [];
-    doc.images.forEach((image) => {
+    doc.thumbnailImage.forEach((image) => {
       const imageUrl = `${process.env.BASE_URL}/blog/${image}`;
       imageList.push(imageUrl);
     });
-    doc.images = imageList;
+    doc.thumbnailImage = imageList;
   }
 };
 

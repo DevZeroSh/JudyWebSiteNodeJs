@@ -6,10 +6,10 @@ const {
   uploadSingleImage,
   uploadMixOfImages,
 } = require("../middlewares/uploadingImage");
-exports.uploadBlogImage = uploadSingleImage("photo");
+exports.uploadBlogImage = uploadSingleImage("coverImage");
 exports.uploadBlogImages = uploadMixOfImages([
-  { name: "photo", maxCount: 1 },
-  { name: "images", maxCount: 10 },
+  { name: "coverImage", maxCount: 1 },
+  { name: "thumbnailImage", maxCount: 10 },
 ]);
 
 const { v4: uuidv4 } = require("uuid");
@@ -18,27 +18,27 @@ const { default: slugify } = require("slugify");
 
 // Image processing
 exports.resizeBlogImages = asyncHandler(async (req, res, next) => {
-  if (req.files && req.files.photo) {
+  if (req.files && req.files.coverImage) {
     const photoFilename = `Blog-${uuidv4()}-${Date.now()}.webp`;
 
-    await sharp(req.files.photo[0].buffer)
+    await sharp(req.files.coverImage[0].buffer)
       .toFormat("webp")
       .webp({ quality: 70 })
       .toFile(`uploads/Blog/${photoFilename}`);
 
-    req.body.photo = photoFilename;
+    req.body.coverImage = photoFilename;
   }
 
-  if (req.files && req.files.images) {
-    req.body.images = [];
+  if (req.files && req.files.thumbnailImage) {
+    req.body.thumbnailImage = [];
     await Promise.all(
-      req.files.images.map(async (file) => {
+      req.files.thumbnailImage.map(async (file) => {
         const filename = `Blog-${uuidv4()}-${Date.now()}.webp`;
         await sharp(file.buffer)
           .toFormat("webp")
           .webp({ quality: 70 })
           .toFile(`uploads/Blog/${filename}`);
-        req.body.images.push(filename);
+        req.body.thumbnailImage.push(filename);
       })
     );
   }
@@ -48,7 +48,12 @@ exports.resizeBlogImages = asyncHandler(async (req, res, next) => {
 
 exports.getBlog = asyncHandler(async (req, res, next) => {
   try {
-    const { keyword, page = 1, limit = 5, sort = "-createdAt" } = req.query;
+    const {
+      keyword,
+      page = req.query.page || 1,
+      limit = req.query.limit || 10,
+      sort = "-createdAt",
+    } = req.query;
 
     const query = {};
 
