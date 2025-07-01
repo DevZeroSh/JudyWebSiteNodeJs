@@ -164,3 +164,22 @@ exports.deleteBlog = asyncHandler(async (req, res) => {
   }
   res.status(204).send();
 });
+
+exports.getBlogsByCategory = asyncHandler(async (req, res, next) => {
+  const { slug } = req.params;
+
+  const category = await categoryModel.findOne({ slug });
+  if (!category) {
+    return next(new ApiError(`No category found with slug: ${slug}`, 404));
+  }
+
+  const blogs = await blogModel
+    .find({ category: category._id })
+    .populate("category");
+
+  res.status(200).json({
+    status: true,
+    count: blogs.length,
+    data: blogs,
+  });
+});

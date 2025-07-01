@@ -16,4 +16,5 @@ CategoryRouter.route("/:id")
   .put(authService.protect, updateCategory)
   .delete(authService.protect, deleteCategory)
   .get(getOneCategory);
+
 module.exports = CategoryRouter;

@@ -10,6 +10,7 @@ const {
   updateBlog,
   deleteBlog,
   uploadBlogImages,
+  getBlogsByCategory,
 } = require("../services/blogService");
 
 const BlogRouter = express.Router();
@@ -20,5 +21,6 @@ BlogRouter.route("/")
 BlogRouter.route("/:id")
   .get(getOneBlog)
   .put(authService.protect, uploadBlogImages, resizeBlogImages, updateBlog)
-  .delete(authService.protect,deleteBlog);
+  .delete(authService.protect, deleteBlog);
+BlogRouter.route("/blogby_category/:slug").get(getBlogsByCategory);
 module.exports = BlogRouter;

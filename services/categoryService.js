@@ -90,3 +90,4 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
   }
   res.status(204).send();
 });
+
