@@ -31,12 +31,23 @@ if (process.env.NODE_ENV === "development") {
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
 
-app.use("/api/auth", authRouter);
 app.use("/api/blog", BlogRouter);
 app.use("/api/soonkitchen", SoonKitchenRouter);
 app.use("/api/soonkitchenlabel", SoonKitchenLabelRouter);
 app.use("/api/soonkitchenrecipe", soonKitchenRecipeRout);
 app.use("/api/category", CategoryRouter);
+app.use("/api/boardMember", boardMemberRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/partners", partnerRouter);
+app.use("/api/header", headerRouter);
+app.use("/api/investmentFields", investmentFieldsRouter);
+app.use("/api/investmentFunds", investmentFundsRouter);
+app.use("/api/footer", footerRouter);
+app.use("/api/contactus", contactUsRouter);
+app.use("/api/companies", companiesRouter);
+app.use("/api/sectors", sectorsRoter);
+app.use("/api/services", ServiceRouter);
+app.use("/api/location", locationRouter);
 // Catch-all route for client-side routing
 app.get("/*", function (req, res) {
   res.sendFile(

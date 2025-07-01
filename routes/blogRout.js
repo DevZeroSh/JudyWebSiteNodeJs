@@ -22,5 +22,5 @@ BlogRouter.route("/:id")
   .get(getOneBlog)
   .put(authService.protect, uploadBlogImages, resizeBlogImages, updateBlog)
   .delete(authService.protect, deleteBlog);
-BlogRouter.route("/blogby_category/:slug").get(getBlogsByCategory);
+BlogRouter.route("/blog_categories/:slug").get(getBlogsByCategory);
 module.exports = BlogRouter;
