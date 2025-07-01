@@ -8,12 +8,22 @@ const fs = require("fs");
 const dbConnection = require("./config/database");
 
 const authRouter = require("./routes/AuthRout");
-
 const BlogRouter = require("./routes/blogRout");
 const SoonKitchenRouter = require("./routes/soonKitchenRout");
 const SoonKitchenLabelRouter = require("./routes/soonKitchenLableRout");
 const soonKitchenRecipeRout = require("./routes/soonKitchenRecipeRout");
 const CategoryRouter = require("./routes/CategoryRout");
+const boardMemberRouter = require("./routes/boardMemberRoute");
+const partnerRouter = require("./routes/partnerRoute");
+const headerRouter = require("./routes/HeaderRout");
+const investmentFieldsRouter = require("./routes/investmentFields");
+const investmentFundsRouter = require("./routes/InvestmentFundsRout");
+const footerRouter = require("./routes/FooterRout");
+const contactUsRouter = require("./routes/contactUsRoute");
+const companiesRouter = require("./routes/CompaniesRout");
+const sectorsRoter = require("./routes/sectorRoute");
+const ServiceRouter = require("./routes/ServicesRoute");
+const locationRouter = require("./routes/locationRoute");
 
 dotenv.config({ path: "config.env" });
 
@@ -30,7 +40,6 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
-
 app.use("/api/blog", BlogRouter);
 app.use("/api/soonkitchen", SoonKitchenRouter);
 app.use("/api/soonkitchenlabel", SoonKitchenLabelRouter);
