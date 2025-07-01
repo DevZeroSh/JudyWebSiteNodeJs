@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 const categoryModel = require("../models/categoryModel");
+const { default: slugify } = require("slugify");
 
 exports.getCategory = asyncHandler(async (req, res, next) => {
   try {
@@ -48,6 +49,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
 });
 
 exports.createCategory = asyncHandler(async (req, res, next) => {
+  req.body.slug = slugify(req.body.name.en);
   const Category = await categoryModel.create(req.body);
   res.status(201).json({ data: Category });
 });

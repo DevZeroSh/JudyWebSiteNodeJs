@@ -15,6 +15,7 @@ exports.uploadBlogImages = uploadMixOfImages([
 const { v4: uuidv4 } = require("uuid");
 const sharp = require("sharp");
 const { default: slugify } = require("slugify");
+const categoryModel = require("../models/categoryModel");
 
 // Image processing
 exports.resizeBlogImages = asyncHandler(async (req, res, next) => {
@@ -49,18 +50,32 @@ exports.resizeBlogImages = asyncHandler(async (req, res, next) => {
 exports.getBlog = asyncHandler(async (req, res, next) => {
   try {
     const {
-      keyword,
+      keyword = req.query.keyword,
       page = req.query.page || 1,
       limit = req.query.limit || 10,
       sort = "-createdAt",
     } = req.query;
 
     const query = {};
-
+    let categoryIds = [];
     if (keyword && keyword.trim() !== "") {
+      const matchedCategories = await categoryModel.find({
+        $or: [
+          { "name.en": { $regex: keyword, $options: "i" } },
+          { "name.ar": { $regex: keyword, $options: "i" } },
+          { "name.ar": { $regex: keyword, $options: "i" } },
+        ],
+      });
+
+      categoryIds = matchedCategories.map((cat) => cat._id);
       query.$or = [
-        { titleEN: { $regex: keyword, $options: "i" } },
-        { descriptionEN: { $regex: keyword, $options: "i" } },
+        { "title.en": { $regex: keyword, $options: "i" } },
+        { "title.ar": { $regex: keyword, $options: "i" } },
+        { "title.tr": { $regex: keyword, $options: "i" } },
+        { "tags.en": { $regex: keyword, $options: "i" } },
+        { "tags.ar": { $regex: keyword, $options: "i" } },
+        { "tags.tr": { $regex: keyword, $options: "i" } },
+        { category: { $in: categoryIds } },
       ];
     }
 
