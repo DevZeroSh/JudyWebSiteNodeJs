@@ -56,7 +56,7 @@ app.use("/api/sectors", sectorsRoter);
 app.use("/api/services", ServiceRouter);
 app.use("/api/location", locationRouter);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 9000;
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}`);
